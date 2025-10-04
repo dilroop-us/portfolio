@@ -1,5 +1,6 @@
 import redis
 import json
+import os
 from typing import Optional, Any
 from datetime import timedelta
 
@@ -109,4 +110,7 @@ class RedisClient:
         except Exception:
             return False
 
-redis_client = RedisClient()
+# Initialize with environment variables (works for both Docker and local)
+redis_host = os.getenv('REDIS_HOST', 'localhost')
+redis_port = int(os.getenv('REDIS_PORT', '6379'))
+redis_client = RedisClient(host=redis_host, port=redis_port)
