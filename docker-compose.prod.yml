@@ -1,0 +1,50 @@
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: redis://redis:6379
+      SESSION_SECRET: ${SESSION_SECRET:-your-secret-key-change-in-production}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_FROM: ${MAIL_FROM}
+      MAIL_TO: ${MAIL_TO}
+      MAIL_SERVER: ${MAIL_SERVER}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_STARTTLS: ${MAIL_STARTTLS}
+      MAIL_SSL_TLS: ${MAIL_SSL_TLS}
+      MAIL_USE_CREDENTIALS: ${MAIL_USE_CREDENTIALS}
+      MAIL_FROM_NAME: ${MAIL_FROM_NAME:-Portfolio Contact Form}
+    ports:
+      - "8000:8000"
+    depends_on:
+      redis:
+        condition: service_healthy
+    command: >
+      sh -c "
+        sleep 2 &&
+        uvicorn backend.main:app --host 0.0.0.0 --port 8000
+      "
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: http://localhost:8000
