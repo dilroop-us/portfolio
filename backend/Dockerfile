@@ -21,5 +21,5 @@ COPY backend/ ./backend/
 # Expose port
 EXPOSE 8000
 
-# Run the application
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run with multiple workers for production
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
