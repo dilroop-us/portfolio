@@ -48,7 +48,7 @@
       <Badge variant="primary" size="lg">SvelteKit</Badge>
     </div>
     <div in:fadeSlide={{ delay: 320 }}>
-      <Link to="/playground/jwt">
+      <Link to="/playground/api">
         <Button variant="primary" size="lg">
           Explore Interactive Demos →
         </Button>
