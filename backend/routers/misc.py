@@ -7,6 +7,7 @@ import uuid
 import asyncio
 import httpx
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
+import resend
 
 from backend.database import get_db
 from backend.models import ContactMessage
@@ -38,25 +39,14 @@ async def simulate_report_generation(task_id: str, params: dict):
         redis_client.set(f"task:{task_id}", {"status": "completed", "result": "Report generated"}, 3600)
     print(f"Task {task_id}: Report generation completed")
 
+
 async def send_email_notification(name: str, email: str, message: str):
-    if not settings.mail_username or not settings.mail_password:
+    if not settings.resend_api_key:
         print(f"⚠️ Email not configured. Message from {name} ({email}): {message}")
         return
     
     try:
-        from pydantic import SecretStr
-        
-        conf = ConnectionConfig(
-            MAIL_USERNAME=str(settings.mail_username),
-            MAIL_PASSWORD=SecretStr(str(settings.mail_password)),
-            MAIL_FROM=str(settings.mail_from),
-            MAIL_PORT=int(settings.mail_port),
-            MAIL_SERVER=str(settings.mail_server),
-            MAIL_STARTTLS=bool(settings.mail_starttls),
-            MAIL_SSL_TLS=bool(settings.mail_ssl_tls),
-            USE_CREDENTIALS=bool(settings.mail_use_credentials),
-            MAIL_FROM_NAME=str(settings.mail_from_name)
-        )
+        resend.api_key = settings.resend_api_key
         
         email_body = f"""
         <!DOCTYPE html>
@@ -124,16 +114,16 @@ async def send_email_notification(name: str, email: str, message: str):
         </html>
         """
         
-        message_schema = MessageSchema(
-            subject=f"💬 {name} sent you a message",
-            recipients=[settings.mail_to],
-            body=email_body,
-            subtype=MessageType.html
-        )
+        params: resend.Emails.SendParams = {
+            "from": "portfolio@dilroopus.com",
+            "to": [settings.contact_email_to],
+            "subject": f"💬 {name} sent you a message",
+            "html": email_body
+        }
         
-        fm = FastMail(conf)
-        await fm.send_message(message_schema)
-        print(f"✅ Email sent successfully to {settings.mail_to}")
+        result = resend.Emails.send(params)
+        print(f"✅ Email sent successfully to {settings.contact_email_to}: {result}")
+        
     except Exception as e:
         print(f"❌ Failed to send email: {str(e)}")
 

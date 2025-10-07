@@ -23,16 +23,8 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       SESSION_SECRET: ${SESSION_SECRET}
-      MAIL_USERNAME: ${MAIL_USERNAME}
-      MAIL_PASSWORD: ${MAIL_PASSWORD}
-      MAIL_FROM: ${MAIL_FROM}
-      MAIL_TO: ${MAIL_TO}
-      MAIL_SERVER: ${MAIL_SERVER}
-      MAIL_PORT: ${MAIL_PORT}
-      MAIL_STARTTLS: ${MAIL_STARTTLS}
-      MAIL_SSL_TLS: ${MAIL_SSL_TLS}
-      MAIL_USE_CREDENTIALS: ${MAIL_USE_CREDENTIALS}
-      MAIL_FROM_NAME: ${MAIL_FROM_NAME:-Portfolio Contact Form}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      CONTACT_EMAIL_TO: ${CONTACT_EMAIL_TO}
     depends_on:
       redis:
         condition: service_healthy

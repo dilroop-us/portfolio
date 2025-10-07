@@ -24,4 +24,5 @@ dependencies = [
     "strawberry-graphql[fastapi]>=0.282.0",
     "uvicorn[standard]>=0.37.0",
     "websockets>=15.0.1",
+    "resend>=2.0.0",
 ]
