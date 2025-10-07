@@ -33,19 +33,19 @@ services:
       - app-network
 
   frontend:
-  build:
-    context: .
-    dockerfile: frontend/Dockerfile
-  container_name: portfolio-frontend
-  ports:
-    - "80:80"
-    - "443:443"
-  volumes:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: portfolio-frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
     - /etc/letsencrypt:/etc/letsencrypt:ro
     - /var/www/certbot:/var/www/certbot:ro
-  depends_on:
+    depends_on:
     - backend
-  restart: unless-stopped
+    restart: unless-stopped    
 
 networks:
   app-network:
