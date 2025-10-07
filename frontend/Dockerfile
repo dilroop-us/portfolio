@@ -1,3 +1,4 @@
+cat > frontend/Dockerfile << 'EOF'
 FROM node:20-alpine AS builder
 
 WORKDIR /app
@@ -10,11 +11,11 @@ FROM nginx:alpine
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy certificates directly into image (no volume mount needed!)
-COPY --from=0 /dev/null /tmp/.placeholder || true
-RUN mkdir -p /etc/nginx/certs
+# Copy SSL certificates into the image
+COPY certs/fullchain.pem /etc/nginx/certs/fullchain.pem
+COPY certs/privkey.pem /etc/nginx/certs/privkey.pem
 
-COPY <<EOF /etc/nginx/conf.d/default.conf
+COPY <<EOF2 /etc/nginx/conf.d/default.conf
 server {
     listen 80;
     server_name dilroopus.com www.dilroopus.com;
@@ -72,7 +73,8 @@ server {
         try_files \$uri \$uri/ /index.html;
     }
 }
-EOF
+EOF2
 
 EXPOSE 80 443
 CMD ["nginx", "-g", "daemon off;"]
+EOF
