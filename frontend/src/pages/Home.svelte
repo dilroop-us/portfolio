@@ -179,14 +179,14 @@
     </ScrollReveal>
     
     <Grid cols="2" gap="6">
-      <ScrollReveal delay={0}>
-        <Link to="/playground/jwt">
+      <ScrollReveal delay={320}>
+        <Link to="/playground/chat">
           <Card hover={true}>
-            <div class="text-5xl mb-6">🔐</div>
-            <h3 class="gradient-text mb-4">JWT Authentication</h3>
+            <div class="text-5xl mb-6">💬</div>
+            <h3 class="gradient-text mb-4">Chat Playground</h3>
             <p class="text-gray-300">
-              Encode & decode JWT tokens with 10 signing algorithms. 
-              Learn token structure and security best practices.
+              Build a real-time chat app with WebSockets and message persistence. 
+              Learn about real-time communication and state management.
             </p>
           </Card>
         </Link>
@@ -230,6 +230,8 @@
           </Card>
         </Link>
       </ScrollReveal>
+
+
     </Grid>
   </Container>
 </Section>
