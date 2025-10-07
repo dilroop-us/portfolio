@@ -2,7 +2,6 @@
   import { Router, Route, Link } from 'svelte-routing';
   import { fade } from 'svelte/transition';
   import Home from './pages/Home.svelte';
-  import JWTPlayground from './pages/JWTPlayground.svelte';
   import APIPlayground from './pages/APIPlayground.svelte';
   import DatabasePlayground from './pages/DatabasePlayground.svelte';
   import CachingPlayground from './pages/CachingPlayground.svelte';
@@ -46,7 +45,6 @@
         
         <div class="hidden md:flex gap-6">
           <Link to="/" on:click={handleNavigation} class="nav-link" getProps={({ isCurrent }) => ({ class: isCurrent ? 'nav-link active' : 'nav-link' })}>Home</Link>
-          <!-- <Link to="/playground/jwt" on:click={handleNavigation} class="nav-link" getProps={({ isCurrent }) => ({ class: isCurrent ? 'nav-link active' : 'nav-link' })}>JWT Demo</Link> -->
           <Link to="/playground/api" on:click={handleNavigation} class="nav-link" getProps={({ isCurrent }) => ({ class: isCurrent ? 'nav-link active' : 'nav-link' })}>API Playground</Link>
           <Link to="/playground/database" on:click={handleNavigation} class="nav-link" getProps={({ isCurrent }) => ({ class: isCurrent ? 'nav-link active' : 'nav-link' })}>Database</Link>
           <Link to="/playground/caching" on:click={handleNavigation} class="nav-link" getProps={({ isCurrent }) => ({ class: isCurrent ? 'nav-link active' : 'nav-link' })}>Caching</Link>
@@ -76,7 +74,6 @@
       {#if mobileMenuOpen}
         <div class="md:hidden mt-4 pb-4 flex flex-col gap-3" transition:fade={{ duration: 150 }}>
           <Link to="/" on:click={handleNavigation} class="nav-link py-2">Home</Link>
-          <!-- <Link to="/playground/jwt" on:click={handleNavigation} class="nav-link py-2">JWT Demo</Link> -->
           <Link to="/playground/api" on:click={handleNavigation} class="nav-link py-2">API Playground</Link>
           <Link to="/playground/database" on:click={handleNavigation} class="nav-link py-2">Database</Link>
           <Link to="/playground/caching" on:click={handleNavigation} class="nav-link py-2">Caching</Link>
@@ -89,7 +86,6 @@
 
   <main class="min-h-screen">
     <Route path="/"><Home /></Route>
-    <!-- <Route path="/playground/jwt"><JWTPlayground /></Route> -->
     <Route path="/playground/api"><APIPlayground /></Route>
     <Route path="/playground/database"><DatabasePlayground /></Route>
     <Route path="/playground/caching"><CachingPlayground /></Route>

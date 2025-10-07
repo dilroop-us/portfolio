@@ -179,18 +179,6 @@
     </ScrollReveal>
     
     <Grid cols="2" gap="6">
-      <ScrollReveal delay={320}>
-        <Link to="/playground/chat">
-          <Card hover={true}>
-            <div class="text-5xl mb-6">💬</div>
-            <h3 class="gradient-text mb-4">Chat Playground</h3>
-            <p class="text-gray-300">
-              Build a real-time chat app with WebSockets and message persistence. 
-              Learn about real-time communication and state management.
-            </p>
-          </Card>
-        </Link>
-      </ScrollReveal>
       
       <ScrollReveal delay={80}>
         <Link to="/playground/api">
@@ -231,7 +219,19 @@
         </Link>
       </ScrollReveal>
 
-
+      <ScrollReveal delay={320}>
+        <Link to="/playground/chat">
+          <Card hover={true}>
+            <div class="text-5xl mb-6">💬</div>
+            <h3 class="gradient-text mb-4">Chat Playground</h3>
+            <p class="text-gray-300">
+              Build a real-time chat app with WebSockets and message persistence. 
+              Learn about real-time communication and state management.
+            </p>
+          </Card>
+        </Link>
+      </ScrollReveal>
+      
     </Grid>
   </Container>
 </Section>
