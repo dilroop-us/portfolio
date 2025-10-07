@@ -17,38 +17,11 @@ RUN npm run build
 # Production stage with nginx
 FROM nginx:alpine
 
-# Copy nginx config with HTTPS support
+# Just HTTP for now - no SSL
 COPY <<EOF /etc/nginx/conf.d/default.conf
-# HTTP server - redirect to HTTPS
 server {
     listen 80;
-    server_name dilroopus.com www.dilroopus.com;
-    
-    # Let's Encrypt challenge
-    location /.well-known/acme-challenge/ {
-        root /var/www/certbot;
-    }
-    
-    # Redirect all HTTP to HTTPS
-    location / {
-        return 301 https://\$host\$request_uri;
-    }
-}
-
-# HTTPS server
-server {
-    listen 443 ssl;
-    http2 on;
-    server_name dilroopus.com www.dilroopus.com;
-    
-    # SSL certificates
-    ssl_certificate /etc/letsencrypt/live/dilroopus.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/dilroopus.com/privkey.pem;
-    
-    # SSL configuration
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_prefer_server_ciphers on;
-    ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384';
+    server_name dilroopus.com www.dilroopus.com _;
     
     # Docker DNS resolver
     resolver 127.0.0.11 valid=30s;
@@ -70,7 +43,7 @@ server {
         proxy_cache_bypass \$http_upgrade;
     }
     
-    # WebSocket support for live chat
+    # WebSocket support
     location /api/ws {
         set \$backend_upstream http://backend:8000;
         proxy_pass \$backend_upstream;
@@ -80,7 +53,7 @@ server {
         proxy_set_header Host \$host;
     }
     
-    # Cache static assets for performance
+    # Cache static assets
     location ~* \.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$ {
         expires 1y;
         add_header Cache-Control "public, immutable";
