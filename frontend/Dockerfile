@@ -10,6 +10,10 @@ FROM nginx:alpine
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 
+# Copy certificates directly into image (no volume mount needed!)
+COPY --from=0 /dev/null /tmp/.placeholder || true
+RUN mkdir -p /etc/nginx/certs
+
 COPY <<EOF /etc/nginx/conf.d/default.conf
 server {
     listen 80;
