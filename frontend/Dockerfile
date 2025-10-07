@@ -50,12 +50,16 @@ server {
     ssl_prefer_server_ciphers on;
     ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384';
     
+    # Docker DNS resolver
+    resolver 127.0.0.11 valid=30s;
+    
     root /usr/share/nginx/html;
     index index.html;
     
     # Proxy API requests to backend
     location /api/ {
-        proxy_pass http://backend:8000;
+        set \$backend_upstream http://backend:8000;
+        proxy_pass \$backend_upstream;
         proxy_http_version 1.1;
         proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -68,7 +72,8 @@ server {
     
     # WebSocket support for live chat
     location /api/ws {
-        proxy_pass http://backend:8000;
+        set \$backend_upstream http://backend:8000;
+        proxy_pass \$backend_upstream;
         proxy_http_version 1.1;
         proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection "upgrade";
